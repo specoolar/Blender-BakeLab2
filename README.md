@@ -1,7 +1,7 @@
 # Blender-BakeLab2
 ![Thumbnail](bakelab_thumbnail_text_logo_small.jpg)
-BakeLab - A blender addon for baking images.
-Compatible with Blender 2.81 or higher.
+BakeLab - A blender addon for baking images.<br>
+Compatible with Blender 2.81 or higher.<br>
 For blender version 2.79 go to [here](https://github.com/Shahzod114/Bakelab-Blender-addon)
 
 Support the developer buying it on [Gumroad](https://gum.co/Yvjci)
