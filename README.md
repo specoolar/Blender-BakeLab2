@@ -12,4 +12,5 @@ Main Features:
 * Bake any PBR attributes of your material by its name (Metallic, Roughness, Specular and etc);
 * Adaptive image size by object's surface size;
 * Unwrap and Bake Multiple Objects into one image;
+
 ![Thumbnail](bakelab_screen.png)
