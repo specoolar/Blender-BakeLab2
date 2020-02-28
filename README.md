@@ -16,3 +16,6 @@ Main Features:
 * Unwrap and Bake Multiple Objects into one image;
 
 ![Screen](bakelab_screen.png)
+
+video:
+https://youtu.be/XmXek3TPZLk
