@@ -17,7 +17,7 @@ Main Features:
 * Adaptive image size by object's surface size;
 * Unwrap and Bake Multiple Objects into one image;
 
-![Screen](bakelab_screen.png)
-
 video:
 https://youtu.be/XmXek3TPZLk
+
+![Screen](bakelab_screen.png)
