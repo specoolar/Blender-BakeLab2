@@ -424,7 +424,17 @@ class Baker(Operator):
             height = map.target_height * map.final_aa
         )
         bake_image.use_generated_float = map.float_depth
-        bake_image.colorspace_settings.name = map.color_space
+        try:
+            bake_image.colorspace_settings.name = map.color_space
+        except:
+            try:
+                if map.color_space == 'sRGB':
+                    bake_image.colorspace_settings.name = 'sRGB EOTF'
+                elif map.color_space == 'Non-Color':
+                    bake_image.colorspace_settings.name = 'Non-Colour Data'
+            except:
+                self.report(type = {'WARNING'}, message = "Couldn't change color space of image")
+        
         context.scene.render.bake.margin = props.bake_margin * map.final_aa
         if props.save_or_pack == 'PACK':
             bake_image.pack()
