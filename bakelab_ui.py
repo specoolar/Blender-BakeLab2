@@ -122,7 +122,7 @@ class BakeLabUI(Panel):
                             sub_box_col.use_property_split = False
                             row = sub_box_col.row(align = True)
                             row.prop(item, "combined_diffuse", toggle = True)
-                            row.prop(item, "combined_subsurface", toggle = True)
+                            #row.prop(item, "combined_subsurface", toggle = True)
                             
                             row = sub_box_col.row(align = True)
                             row.prop(item, "combined_glossy", toggle = True)
