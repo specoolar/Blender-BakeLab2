@@ -346,7 +346,7 @@ class Baker(Operator):
             bake_settings.use_pass_diffuse           = map.combined_diffuse
             bake_settings.use_pass_glossy            = map.combined_glossy
             bake_settings.use_pass_transmission      = map.combined_transmission
-            bake_settings.use_pass_subsurface        = map.combined_subsurface
+            #bake_settings.use_pass_subsurface        = map.combined_subsurface
             bake_settings.use_pass_ambient_occlusion = map.combined_ambient_occlusion
             bake_settings.use_pass_emit              = map.combined_emit
         else:
