@@ -53,13 +53,18 @@ from bpy.props import (
             PointerProperty,
             CollectionProperty
         )
+from os.path import expanduser
 
 def updateAdaptiveImageMinSize(self, context):
     self.image_min_size = min(self.image_min_size, self.image_max_size)
 
 def updateAdaptiveImageMaxSize(self, context):
     self.image_max_size = max(self.image_min_size, self.image_max_size)
-    
+
+def updateSavePath(self, context):
+    if not bpy.data.is_saved:
+        self.save_path = bpy.path.abspath("//")
+
 class BakeLabProperties(PropertyGroup):
     bake_state: EnumProperty(
             items = (
@@ -149,10 +154,11 @@ class BakeLabProperties(PropertyGroup):
                 ),
                 default = 'PACK'
             )
-    save_path     : StringProperty(
-                default="C:\\BakedMaps\\",
+    save_path : StringProperty(
+                default=expanduser("~"),
                 name="Folder",
-                subtype="FILE_PATH"
+                subtype="FILE_PATH",
+                update=updateSavePath
             )
     show_bake_settings : BoolProperty(name = '', default = False)
     show_map_settings  : BoolProperty(name = '', default = False)
