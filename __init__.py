@@ -63,7 +63,7 @@ def updateAdaptiveImageMaxSize(self, context):
 
 def updateSavePath(self, context):
     if bpy.data.is_saved:
-        self.save_path = bpy.path.abspath("//")
+        self.save_path = bpy.path.abspath(self.save_path)
 
 class BakeLabProperties(PropertyGroup):
     bake_state: EnumProperty(
