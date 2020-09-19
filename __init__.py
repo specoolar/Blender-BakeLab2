@@ -62,7 +62,7 @@ def updateAdaptiveImageMaxSize(self, context):
     self.image_max_size = max(self.image_min_size, self.image_max_size)
 
 def updateSavePath(self, context):
-    if not bpy.data.is_saved:
+    if bpy.data.is_saved:
         self.save_path = bpy.path.abspath("//")
 
 class BakeLabProperties(PropertyGroup):
