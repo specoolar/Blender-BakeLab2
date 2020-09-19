@@ -157,7 +157,7 @@ class BakeLabProperties(PropertyGroup):
     save_path : StringProperty(
                 default=expanduser("~"),
                 name="Folder",
-                subtype="FILE_PATH",
+                subtype="DIR_PATH",
                 update=updateSavePath
             )
     show_bake_settings : BoolProperty(name = '', default = False)
