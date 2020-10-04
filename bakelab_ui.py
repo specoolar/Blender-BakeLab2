@@ -37,7 +37,6 @@ class BakeLabUI(Panel):
                 col = box.column()
                 col.use_property_split = True
                 col.use_property_decorate = False
-                col.prop(props, "compute_device")
                 if props.bake_mode == "ALL_TO_ONE":
                     col.prop(props, "global_image_name")
                 col.prop(props, "bake_margin")
@@ -46,6 +45,7 @@ class BakeLabUI(Panel):
             
             layout.separator()
             
+            col.prop(props, "compute_device")
             col = layout.column(align=True)
             col.use_property_split = True
             col.use_property_decorate = False
