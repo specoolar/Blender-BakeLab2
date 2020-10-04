@@ -45,7 +45,7 @@ class BakeLabUI(Panel):
             
             layout.separator()
             
-            col.prop(props, "compute_device")
+            layout.prop(props, "compute_device")
             col = layout.column(align=True)
             col.use_property_split = True
             col.use_property_decorate = False
