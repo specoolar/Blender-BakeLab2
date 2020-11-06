@@ -214,7 +214,11 @@ class Baker(Operator):
     def find_node(self, nodes, type):
         for node in nodes:
             if node.type == type:
-                return node
+                if type == "OUTPUT_MATERIAL":
+                    if node.is_active_output:
+                        return node
+                else:
+                    return node
         return None
     
     def get_socket(self, sockets, identifier):
