@@ -60,10 +60,11 @@ class Baker(Operator):
         
         # Bake settings{
         bake_settings = context.scene.render.bake
-        self.default_use_s2a  = render.bake.use_selected_to_active
-        self.default_use_cage = render.bake.use_cage
-        self.default_cage_extrusion = render.bake.cage_extrusion
-        self.default_bake_margin    = render.bake.margin
+        self.default_use_s2a = bake_settings.use_selected_to_active
+        self.default_use_clear = bake_settings.use_clear
+        self.default_use_cage = bake_settings.use_cage
+        self.default_cage_extrusion = bake_settings.cage_extrusion
+        self.default_bake_margin    = bake_settings.margin
         self.default_samples = scene.cycles.samples
         self.default_normal_space = bake_settings.normal_space
         
@@ -107,10 +108,11 @@ class Baker(Operator):
         
         # Bake settings{
         bake_settings = context.scene.render.bake
-        render.bake.use_selected_to_active = self.default_use_s2a
-        render.bake.use_cage = self.default_use_cage
-        render.bake.cage_extrusion = self.default_cage_extrusion
-        render.bake.margin  = self.default_bake_margin
+        bake_settings.use_selected_to_active = self.default_use_s2a
+        bake_settings.use_clear = self.default_use_clear
+        bake_settings.use_cage = self.default_use_cage
+        bake_settings.cage_extrusion = self.default_cage_extrusion
+        bake_settings.margin  = self.default_bake_margin
         scene.cycles.samples = self.default_samples
         bake_settings.normal_space             = self.default_normal_space
         
@@ -405,7 +407,7 @@ class Baker(Operator):
     def round_to_power_of_2(self, num):
         return pow(2,round(log2(num)))
     
-    def PrepareImage(self, context, map, obj, name):
+    def PrepareImage(self, context, map, objs, name):
         props = context.scene.BakeLabProps
         self.SetSaveImageSettings(context, map)
         
@@ -413,7 +415,9 @@ class Baker(Operator):
             map.target_width  = map.width
             map.target_height = map.height
         elif props.image_size == 'ADAPTIVE':
-            area = self.calc_surf_area(obj)
+            area = 0
+            for obj in objs:
+                area += self.calc_surf_area(obj)
             size = pow(area, 0.5) * props.texel_per_unit
             if props.round_adaptive_image:
                 size = self.round_to_power_of_2(size)
@@ -422,7 +426,7 @@ class Baker(Operator):
             
         map.final_aa = props.anti_alias
         if map.aa_override > 0:
-            final_aa = map.aa_override
+            map.final_aa = map.aa_override
         bake_image = bpy.data.images.new(
             name = map.img_name.replace('*', name),
             width  = map.target_width  * map.final_aa, 
@@ -667,7 +671,7 @@ class Baker(Operator):
                     props.baking_map_index += 1
                     
                     self.ReserveMaterials(obj)
-                    bake_image = self.PrepareImage(context, map, obj, obj.name)
+                    bake_image = self.PrepareImage(context, map, {obj}, obj.name)
                     self.PrepareMaterials(context, obj, {obj}, map, bake_image)
                     bake_type = self.init_bake_settings(context, map)
                     
@@ -703,13 +707,15 @@ class Baker(Operator):
                 baked_data.AddObj(obj)
             # }
             
-            render.bake.use_selected_to_active = True
-            render.bake.use_cage = True
-            render.bake.cage_extrusion = props.cage_extrusion
+            if props.pre_join_mesh:
+                render.bake.use_selected_to_active = True
+                render.bake.use_cage = True
+                render.bake.cage_extrusion = props.cage_extrusion
             
-            merged_object = self.create_merged_object(context, selected_objects)
-            
-            SelectObjects(merged_object, selected_objects)
+                merged_object = self.create_merged_object(context, selected_objects)
+                SelectObjects(merged_object, selected_objects)
+            else:
+                render.bake.use_selected_to_active = False
                 
             props.baking_map_index = 0
             
@@ -718,38 +724,72 @@ class Baker(Operator):
                     continue
                 props.baking_map_index += 1
                 
-                for obj in selected_objects:
-                    self.ReserveMaterials(obj)
-                
-                bake_image = self.PrepareImage(context, map, merged_object, props.global_image_name)
-                self.PrepareMaterials(context, merged_object, selected_objects, map, bake_image)
-                bake_type = self.init_bake_settings(context, map)
-                
-                self.UpdateDisplayStatus(props,obj,map,bake_image)
-                
-                # Bake {
-                while bpy.ops.object.bake('INVOKE_DEFAULT', type = bake_type) != {'RUNNING_MODAL'}:
-                    yield 1
-                while not bake_image.is_dirty:
-                    yield 1
-                # }
+                if props.pre_join_mesh:
+                    for obj in selected_objects:
+                        self.ReserveMaterials(obj)
+                    
+                    bake_image = self.PrepareImage(context, map, {merged_object}, props.global_image_name)
+                    self.PrepareMaterials(context, merged_object, selected_objects, map, bake_image)
+                    bake_type = self.init_bake_settings(context, map)
+                    
+                    self.UpdateDisplayStatus(props,obj,map,bake_image)
+                    
+                    # Bake {
+                    while bpy.ops.object.bake('INVOKE_DEFAULT', type = bake_type) != {'RUNNING_MODAL'}:
+                        yield 1
+                    while not bake_image.is_dirty:
+                        yield 1
+                    # }
 
-                self.down_scale(bake_image, props, map)
-                if props.save_or_pack == 'PACK':
-                    bake_image.pack()
+                    self.RestoreMaterials()
+
+                    self.down_scale(bake_image, props, map)
+                    if props.save_or_pack == 'PACK':
+                        bake_image.pack()
+                    else:
+                        bake_image.save_render(bake_image.filepath)
                 else:
-                    bake_image.save_render(bake_image.filepath)
+                    render.bake.use_clear = False
+                    bake_image = self.PrepareImage(context, map, selected_objects, props.global_image_name)
+                    for obj in selected_objects:
+                        SelectObject(obj)
+                        self.ReserveMaterials(obj)
+                        
+                        self.PrepareMaterials(context, obj, {obj}, map, bake_image)
+                        bake_type = self.init_bake_settings(context, map)
+                        
+                        self.UpdateDisplayStatus(props, obj, map, bake_image)
+                        
+                        # Bake {
+                        while bpy.ops.object.bake('INVOKE_DEFAULT', type = bake_type) != {'RUNNING_MODAL'}:
+                            yield 1
+                        while not bake_image.is_dirty:
+                            yield 1
+                        # }
+                        
+                        if props.save_or_pack == 'PACK':
+                            bake_image.pack()
+                        else:
+                            bake_image.save_render(bake_image.filepath)
+                        
+                        self.RestoreMaterials()
+
+                    self.down_scale(bake_image, props, map)
+                    if props.save_or_pack == 'PACK':
+                        bake_image.pack()
+                    else:
+                        bake_image.save_render(bake_image.filepath)
                     
                 baked_data.AddMap(map, bake_image) # Save baking data
-                self.RestoreMaterials()
-                
-            merged_data = merged_object.data
-            bpy.data.objects.remove(merged_object)
-            bpy.data.meshes.remove(merged_data)
+
+            if props.pre_join_mesh:
+                merged_data = merged_object.data
+                bpy.data.objects.remove(merged_object)
+                bpy.data.meshes.remove(merged_data)
         ##########################################################################################
         elif props.bake_mode == "TO_ACTIVE":
             if len(selected_objects) < 2:
-                self.report(type = {'ERROR'}, message = 'Please select atleast two mesh objects')
+                self.report(type = {'ERROR'}, message = 'Select atleast two mesh objects')
                 yield -1
             if active_object.type != 'MESH':
                 self.report(type = {'ERROR'}, message = 'Active object is not mesh type')
@@ -779,7 +819,7 @@ class Baker(Operator):
                 for obj in selected_objects:
                     self.ReserveMaterials(obj)
                 
-                bake_image = self.PrepareImage(context, map, active_object, active_object.name)
+                bake_image = self.PrepareImage(context, map, {active_object}, active_object.name)
                 self.PrepareMaterials(
                     context, 
                     active_object, 
