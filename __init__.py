@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Shahzod Boyxonov (specoolar@gmail.com)",
     "description" : "Bake textures easily",
     "blender" : (2, 81, 0),
-    "version" : (2, 0, 0),
+    "version" : (2, 0, 1),
     "location" : "View3D > Properties > BakeLab",
     "category" : "Baking"
 }
