@@ -88,6 +88,10 @@ class BakeLabProperties(PropertyGroup):
             name = 'Cage Extrusion', default = 0.05,
             min = 0, soft_max = 1
         )
+    pre_join_mesh : BoolProperty(
+            name = 'Pre-Join Meshes', default = False,
+            description = 'Create one merged mesh and bake to it using ray-tracing',
+        )
     image_size : EnumProperty(
             name = 'Image Size',
             items = (
@@ -129,7 +133,7 @@ class BakeLabProperties(PropertyGroup):
     bake_margin    : IntProperty(
             name = 'Bake Margin',
             description = 'Extends the baked result as a post process filter',
-            default = 16,
+            default = 4,
             min = 0,
             soft_max = 64
         )
