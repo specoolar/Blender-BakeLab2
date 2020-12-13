@@ -163,7 +163,7 @@ class Unwrapper(Operator):
         
         if self.unwrap_method == 'smart_uv':
             bpy.ops.uv.smart_project(
-                angle_limit = self.smart_uv_angle,
+                angle_limit = self.smart_uv_angle / 57.2958, # To radian
                 island_margin = self.smart_uv_margin
             )
         elif self.unwrap_method == 'lightmap_uv':
