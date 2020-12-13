@@ -37,11 +37,14 @@ class BakeLabUI(Panel):
                 col = box.column()
                 col.use_property_split = True
                 col.use_property_decorate = False
+                col.prop(props, "bake_margin")
+                if props.bake_mode == "TO_ACTIVE":
+                    col.prop(props, "cage_extrusion")
                 if props.bake_mode == "ALL_TO_ONE":
                     col.prop(props, "global_image_name")
-                col.prop(props, "bake_margin")
-                if props.bake_mode != "INDIVIDUAL":
-                    col.prop(props, "cage_extrusion")
+                    col.prop(props, "pre_join_mesh")
+                    if props.pre_join_mesh:
+                        col.prop(props, "cage_extrusion")
             
             layout.separator()
             
