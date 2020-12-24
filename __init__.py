@@ -158,6 +158,16 @@ class BakeLabProperties(PropertyGroup):
                 ),
                 default = 'PACK'
             )
+    create_folder : BoolProperty(
+        name="Create folder",
+        description="Automatically creates a folder named after the object(s)",
+        default = True
+        ) 
+    folder_name  : StringProperty(
+            name = 'Folder name',
+            description = 'Name of the folder',
+            default = "Selection",
+        )
     save_path : StringProperty(
                 default=expanduser("~"),
                 name="Folder",

@@ -16,7 +16,7 @@ from bpy.props import (
         )
 
 from math import log2
-from os.path import abspath, join
+from os.path import abspath, join, exists
 
 from .bakelab_tools import (
     SelectObject,
@@ -455,7 +455,13 @@ class Baker(Operator):
                 extension = '.jpg'
             if map.file_format == 'OPEN_EXR':
                 extension = '.exr'
-            bake_image.filepath = abspath(join(props.save_path, bake_image.name + extension))
+            if props.create_folder:
+                if props.bake_mode == "ALL_TO_ONE":
+                    bake_image.filepath = abspath(join(props.save_path, props.folder_name, bake_image.name + extension))
+                else:
+                    bake_image.filepath = abspath(join(props.save_path, name, bake_image.name + extension))
+            else:
+                bake_image.filepath = abspath(join(props.save_path, bake_image.name + extension))
             
             bake_image.save_render(bake_image.filepath)
         
