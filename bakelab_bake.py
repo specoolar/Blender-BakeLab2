@@ -1,3 +1,5 @@
+import os
+
 import bpy
 
 from bpy.types import (
@@ -455,7 +457,11 @@ class Baker(Operator):
                 extension = '.jpg'
             if map.file_format == 'OPEN_EXR':
                 extension = '.exr'
-            bake_image.filepath = abspath(join(props.save_path, bake_image.name + extension))
+
+            abs_save_path = bpy.path.abspath(props.save_path)
+            if not os.path.isdir(abs_save_path):
+                os.makedirs(abs_save_path, 0o777)
+            bake_image.filepath = abspath(join(abs_save_path, bake_image.name + extension))
             
             bake_image.save_render(bake_image.filepath)
         
