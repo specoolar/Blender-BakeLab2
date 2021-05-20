@@ -72,9 +72,11 @@ class BakeLabUI(Panel):
             layout.use_property_split = False
             if props.save_or_pack == "SAVE":
                 layout.prop(props, "save_path")
+                layout.prop(props, "create_folder")
+                if props.bake_mode == "ALL_TO_ONE":
+                    layout.prop(props, "folder_name")
             else:
                 layout.label(text = "")
-            
             col = layout.column()
             col.label(text = "Maps:")
             box = col.box()
