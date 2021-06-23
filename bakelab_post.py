@@ -86,7 +86,7 @@ class BakeLab_GenerateMaterials(Operator):
                 nmNode.location = -700, -500
                 nmNode.space = bake_map.normal_space
                 links.new(imgNode.outputs[0], nmNode.inputs[1])
-                links.new(nmNode.outputs[0], pbr.inputs[19])
+                links.new(nmNode.outputs[0], pbr.inputs[20])
                 links.new(uvm.outputs[2], imgNode.inputs[0])
                 pass_available = True
             if bake_map.type == 'AO':
