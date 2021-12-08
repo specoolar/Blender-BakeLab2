@@ -186,7 +186,7 @@ class BakeLabMap(PropertyGroup):
     combined_glossy            : BoolProperty(name = 'Glossy',       default = True)
     combined_transmission      : BoolProperty(name = 'Transmission', default = True)
     #combined_subsurface        : BoolProperty(name = 'Subsurface',   default = True)
-    combined_ambient_occlusion : BoolProperty(name = 'AO',           default = True)
+    #combined_ambient_occlusion : BoolProperty(name = 'AO',           default = True)
     combined_emit              : BoolProperty(name = 'Emit',         default = True)
 ################################################################
 ################################################################
