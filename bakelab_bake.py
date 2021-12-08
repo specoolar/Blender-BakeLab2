@@ -77,7 +77,7 @@ class Baker(Operator):
         self.default_use_pass_glossy   = bake_settings.use_pass_glossy
         self.default_use_pass_trans    = bake_settings.use_pass_transmission
         #self.default_use_pass_sss      = bake_settings.use_pass_subsurface # No Longer in 2.83
-        self.default_use_pass_ao       = bake_settings.use_pass_ambient_occlusion
+        #self.default_use_pass_ao       = bake_settings.use_pass_ambient_occlusion # No Longer in 3.0
         self.default_use_pass_emit     = bake_settings.use_pass_emit
     
         self.default_use_cage          = bake_settings.use_cage
@@ -125,7 +125,7 @@ class Baker(Operator):
         bake_settings.use_pass_glossy            = self.default_use_pass_glossy
         bake_settings.use_pass_transmission      = self.default_use_pass_trans
         #bake_settings.use_pass_subsurface        = self.default_use_pass_sss # No Longer in 2.83
-        bake_settings.use_pass_ambient_occlusion = self.default_use_pass_ao
+        #bake_settings.use_pass_ambient_occlusion = self.default_use_pass_ao # No Longer in 3.0
         bake_settings.use_pass_emit              = self.default_use_pass_emit
     
         bake_settings.use_cage                 = self.default_use_cage
