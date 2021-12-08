@@ -131,7 +131,7 @@ class BakeLabUI(Panel):
                             
                             row = sub_box_col.row(align = True)
                             row.prop(item, "combined_glossy", toggle = True)
-                            row.prop(item, "combined_ambient_occlusion", toggle = True)
+                            #row.prop(item, "combined_ambient_occlusion", toggle = True)
                             
                             row = sub_box_col.row(align = True)
                             row.prop(item, "combined_transmission", toggle = True)
