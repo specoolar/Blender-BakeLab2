@@ -86,7 +86,7 @@ class BakeLab_GenerateMaterials(Operator):
                 nmNode.location = -700, -500
                 nmNode.space = bake_map.normal_space
                 links.new(imgNode.outputs[0], nmNode.inputs[1])
-                links.new(nmNode.outputs[0], pbr.inputs[20])
+                links.new(nmNode.outputs[0], pbr.inputs[22])
                 links.new(uvm.outputs[2], imgNode.inputs[0])
                 pass_available = True
             if bake_map.type == 'AO':
@@ -119,7 +119,7 @@ class BakeLab_GenerateMaterials(Operator):
                 imgNode.hide = True
                 imgNode.location = -1000, -200
                 imgNode.image = bake_image
-                links.new(imgNode.outputs[0],pbr.inputs[5])
+                links.new(imgNode.outputs[0],pbr.inputs[7])
                 links.new(uvm.outputs[2],imgNode.inputs[0])
                 pass_available = True
             if bake_map.type == 'Roughness':
@@ -127,7 +127,7 @@ class BakeLab_GenerateMaterials(Operator):
                 imgNode.hide = True
                 imgNode.location = -1000, -250
                 imgNode.image = bake_image
-                links.new(imgNode.outputs[0],pbr.inputs[7])
+                links.new(imgNode.outputs[0],pbr.inputs[9])
                 links.new(uvm.outputs[2],imgNode.inputs[0])
                 pass_available = True
             if bake_map.type == 'Transmission':
