@@ -388,7 +388,7 @@ class Baker(Operator):
         if m_type == 'Glossy':
             bake_type = 'GLOSSY'
         if m_type == 'Subsurface':
-            bake_type = 'Transmission'
+            bake_type = 'TRANSMISSION'
         if m_type == 'CustomPass':
             bake_type = 'EMIT'
         return bake_type
