@@ -535,6 +535,8 @@ class Baker(Operator):
                 if map.type == 'CustomPass':
                     if map.deep_search:
                         self.ungroup_nodes(mat.node_tree)
+                    if "Base Color" in map.pass_name:
+                        mat.metallic = 0
                     self.passes_to_emit_node(mat, map.pass_name)
                 if map.type == 'Albedo':
                     self.ungroup_nodes(mat.node_tree)
