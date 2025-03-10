@@ -196,8 +196,8 @@ class BakeLab_GenerateMaterials(Operator):
                 if obj == None:
                     continue
                 
-                if 'Normal' in self.baked_types:
-                    obj.data.use_auto_smooth = False
+                #if 'Normal' in self.baked_types:
+                #    obj.data.use_auto_smooth = False
                 
                 if props.apply_only_selected:
                     if obj not in selected_objects:
