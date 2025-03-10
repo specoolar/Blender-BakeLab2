@@ -60,8 +60,8 @@ class BakeLab_GenerateMaterials(Operator):
                 imgNode.hide = True
                 imgNode.location = -1000,-100
                 imgNode.image = bake_image
-                links.new(imgNode.outputs[0], pbr.inputs[0])
-                links.new(uvm.outputs[2], imgNode.inputs[0])
+                links.new(imgNode.outputs['Color'], pbr.inputs['Base Color'])
+                links.new(uvm.outputs['UV'], imgNode.inputs['Vector'])
                 pass_available = True
             if bake_map.type == 'Combined':
                 imgNode = nodes.new(type = 'ShaderNodeTexImage')
@@ -72,9 +72,9 @@ class BakeLab_GenerateMaterials(Operator):
                 EmitNode.location = -400, 300
                 EmitNode.width = pbr.width
                 EmitNode.hide = True
-                links.new(imgNode.outputs[0], EmitNode.inputs[0])
+                links.new(imgNode.outputs['Color'], EmitNode.inputs[0])
                 links.new(EmitNode.outputs[0], out.inputs[0])
-                links.new(uvm.outputs[2], imgNode.inputs[0])
+                links.new(uvm.outputs['UV'], imgNode.inputs['Vector'])
                 pass_available = True
             if bake_map.type == 'Normal':
                 imgNode = nodes.new(type = 'ShaderNodeTexImage')
@@ -85,9 +85,9 @@ class BakeLab_GenerateMaterials(Operator):
                 nmNode.hide = True
                 nmNode.location = -700, -500
                 nmNode.space = bake_map.normal_space
-                links.new(imgNode.outputs[0], nmNode.inputs[1])
-                links.new(nmNode.outputs[0], pbr.inputs[20])
-                links.new(uvm.outputs[2], imgNode.inputs[0])
+                links.new(imgNode.outputs['Color'], nmNode.inputs['Color'])
+                links.new(nmNode.outputs['Normal'], pbr.inputs['Normal'])
+                links.new(uvm.outputs['UV'], imgNode.inputs['Vector'])
                 pass_available = True
             if bake_map.type == 'AO':
                 out.location[0] += 250
@@ -107,8 +107,8 @@ class BakeLab_GenerateMaterials(Operator):
                 ao_dark.inputs[0].default_value = 0,0,0,0
                 ao_dark.inputs[1].default_value = 0
                 
-                links.new(uvm.outputs[2],imgNode.inputs[0])
-                links.new(imgNode.outputs[0], reroute.inputs[0])
+                links.new(uvm.outputs['UV'],imgNode.inputs['Vector'])
+                links.new(imgNode.outputs['Color'], reroute.inputs[0])
                 links.new(reroute.outputs[0], ao_mix.inputs[0])
                 links.new(ao_dark.outputs[0], ao_mix.inputs[1])
                 links.new(pbr.outputs[0],     ao_mix.inputs[2])
@@ -119,24 +119,24 @@ class BakeLab_GenerateMaterials(Operator):
                 imgNode.hide = True
                 imgNode.location = -1000, -200
                 imgNode.image = bake_image
-                links.new(imgNode.outputs[0],pbr.inputs[5])
-                links.new(uvm.outputs[2],imgNode.inputs[0])
+                links.new(imgNode.outputs['Color'],pbr.inputs['Specular IOR Level'])
+                links.new(uvm.outputs['UV'],imgNode.inputs['Vector'])
                 pass_available = True
             if bake_map.type == 'Roughness':
                 imgNode = nodes.new(type = 'ShaderNodeTexImage')
                 imgNode.hide = True
                 imgNode.location = -1000, -250
                 imgNode.image = bake_image
-                links.new(imgNode.outputs[0],pbr.inputs[7])
-                links.new(uvm.outputs[2],imgNode.inputs[0])
+                links.new(imgNode.outputs['Color'],pbr.inputs['Roughness'])
+                links.new(uvm.outputs['UV'],imgNode.inputs['Vector'])
                 pass_available = True
             if bake_map.type == 'Transmission':
                 imgNode = nodes.new(type = 'ShaderNodeTexImage')
                 imgNode.hide = True
                 imgNode.location = -1000, -900
                 imgNode.image = bake_image
-                links.new(imgNode.outputs[0],pbr.inputs[15])
-                links.new(uvm.outputs[2],imgNode.inputs[0])
+                links.new(imgNode.outputs['Color'],pbr.inputs['Transmission Weight'])
+                links.new(uvm.outputs['UV'],imgNode.inputs['Vector'])
                 pass_available = True
                 
             ###### Custom Passes{
@@ -159,8 +159,8 @@ class BakeLab_GenerateMaterials(Operator):
                         imgNode.hide = True
                         imgNode.location = -1400,node_y_shift
                         imgNode.image = bake_image
-                        links.new(imgNode.outputs[0], pass_input)
-                        links.new(uvm.outputs[2],imgNode.inputs[0])
+                        links.new(imgNode.outputs['Color'], pass_input)
+                        links.new(uvm.outputs['UV'],imgNode.inputs['Vector'])
                         node_y_shift -= 100
                     pass_available = True
                 ####### }
@@ -264,8 +264,8 @@ class BakeLab_ApplyAO(Operator):
         ao_dark.inputs[0].default_value = 0,0,0,0
         ao_dark.inputs[1].default_value = 0
         
-        links.new(uvm.outputs[2],imgNode.inputs[0])
-        links.new(imgNode.outputs[0], ao_mix.inputs[0])
+        links.new(uvm.outputs['UV'],imgNode.inputs['Vector'])
+        links.new(imgNode.outputs['Color'], ao_mix.inputs[0])
         links.new(ao_dark.outputs[0], ao_mix.inputs[1])
         links.new(bsdf.outputs[0],    ao_mix.inputs[2])
         links.new(ao_mix.outputs[0],  out.inputs[0])
